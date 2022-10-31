@@ -7,7 +7,7 @@ use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerInterface;
 use Stringable;
 
-class Logger implements LoggerInterface
+class Logbook implements LoggerInterface
 {
     protected const CHANNEL = "default-channel";
 
@@ -72,43 +72,101 @@ class Logger implements LoggerInterface
         return $this->loggerName;
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function alert(Stringable|string $message, array $context = []): void
     {
         $this->driver()->alert($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     *
+     */
     public function critical(Stringable|string $message, array $context = []): void
     {
         $this->driver()->critical($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function error(Stringable|string $message, array $context = []): void
     {
-        $this->error($message, $context);
+        $this->driver()->error($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function warning(Stringable|string $message, array $context = []): void
     {
-        $this->warning($message, $context);
+        $this->driver()->warning($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function notice(Stringable|string $message, array $context = []): void
     {
-        $this->notice($message, $context);
+        $this->driver()->notice($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function info(Stringable|string $message, array $context = []): void
     {
-        $this->info($message, $context);
+        $this->driver()->info($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function debug(Stringable|string $message, array $context = []): void
     {
         $this->driver()->debug($message, $context);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @param $level
+     * @param Stringable|string $message
+     *
+     * @param array $context
+     */
     public function log($level, Stringable|string $message, array $context = []): void
     {
-        $this->log($message, $context);
+        $this->driver()->log($message, $context);
     }
 }

@@ -2,27 +2,59 @@
     "name": "solvrtech/logbook-client",
     "description": "Logbook client by SolvrTech.",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Solvrtech\\LogbookClient\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "SolvrTech",
             "email": "balabali@balabali.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Solvrtech\\LogbookClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Solvrtech\\LogbookClient\\Tests\\": "tests"
+        }
+    },
     "require": {
-        "php": ">=8.1",
-        "monolog/monolog": "^3.2",
-        "symfony/http-client": "^6.1",
-        "vlucas/phpdotenv": "^5.5"
+        "php": "^8.0.2",
+        "illuminate/contracts": "^9.21",
+        "illuminate/support": "^9.21",
+        "monolog/monolog": "^2.8.0",
+        "symfony/http-client": "^6.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^6.0",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^7.0",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^9.5",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Solvrtech\\LogbookClient\\LogbookServiceProvider"
+            ],
+            "aliases": {
+                "Logbook": "Solvrtech\\LogbookClient\\Facades\\Logbook"
+            }
+        }
     },
     "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    }
+    "prefer-stable": true
 }

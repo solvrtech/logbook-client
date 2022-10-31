@@ -2,7 +2,6 @@
 
 namespace Solvrtech\LogbookClient;
 
-use Dotenv\Dotenv;
 use Exception;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\JsonFormatter;
@@ -32,12 +31,12 @@ class LogHandler extends AbstractProcessingHandler
      *
      * @throws Exception|TransportExceptionInterface
      */
-    protected function write(LogRecord $record): void
+    protected function write(LogRecord|array $record): void
     {
         try {
-            $response = $this->httpClient->request(
+            $this->httpClient->request(
                 'POST',
-                "{$this->getUrl()}/log/create",
+                "{$this->getUrl()}/log/save",
                 [
                     'headers' => [
                         'Content-Type' => 'application/json',
@@ -56,36 +55,36 @@ class LogHandler extends AbstractProcessingHandler
      * Get logbook API url from environment.
      *
      * @return string
+     *
+     * @throws Exception
      */
     private function getUrl(): string
     {
-        $this->loadEnvironment()->safeLoad();
-        $this->loadEnvironment()->required('LOGBOOK_API_URL');
+        $url = config('logbook.option.url');
 
-        return $_ENV['LOGBOOK_API_URL'];
-    }
+        if (null === $url) {
+            throw new Exception("Logbook url not found");
+        }
 
-    /**
-     * Load environment using safe method.
-     *
-     * @return Dotenv
-     */
-    private function loadEnvironment(): Dotenv
-    {
-        return Dotenv::createImmutable(__DIR__);
+        return $url;
     }
 
     /**
      * Get logbook API token from environment.
      *
      * @return string
+     *
+     * @throws Exception
      */
     private function getToken(): string
     {
-        $this->loadEnvironment()->safeLoad();
-        $this->loadEnvironment()->required('LOGBOOK_API_TOKEN');
+        $token = config('logbook.option.token');
 
-        return $_ENV['LOGBOOK_API_TOKEN'];
+        if (null === $token) {
+            throw new Exception("Logbook token not found");
+        }
+
+        return $token;
     }
 
     /**
