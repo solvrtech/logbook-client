@@ -1,0 +1,23 @@
+{
+    "name": "solvrtech/logbook-client",
+    "description": "Logbook client by SolvrTech Team.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Solvrtech\\LogbookClient\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SolvrTech Team",
+            "email": "balabali@balabali.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "monolog/monolog": "^3.2",
+        "symfony/http-client": "^6.1",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}
