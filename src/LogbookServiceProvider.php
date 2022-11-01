@@ -27,7 +27,8 @@ class LogbookServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../config/logbook.php' => config_path('logbook.php'),
+            __DIR__ . '/../config/logbook.php' => config_path('logbook.php'),
+            'logbook-config'
         ]);
     }
 }
