@@ -4,37 +4,26 @@ namespace Solvrtech\LogbookClient;
 
 use Monolog\Logger as Monolog;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Psr\Log\LoggerInterface;
+use Solvrtech\LogbookClient\Handler\LogbookHandler;
 use Stringable;
 
-class Logbook implements LoggerInterface
+class Logbook implements LogbookInterface
 {
-    protected const CHANNEL = "default-channel";
-
-    private LogHandler $logHandler;
+    protected const CHANNEL = 'default-channel';
 
     /**
      * The logging channel
      *
      * @var string|null
      */
-    private ?string $name = null;
-
-    public function __construct(LogHandler $logHandler)
-    {
-        $this->logHandler = $logHandler;
-    }
+    private ?string $channel = null;
 
     /**
-     * Set logger channel
-     *
-     * @param string $name
-     *
-     * @return self
+     * {@inheritDoc}
      */
-    public function setName(string $name): self
+    public function channel(string $channel): LogbookInterface
     {
-        $this->name = $name;
+        $this->channel = $channel;
 
         return $this;
     }
@@ -51,8 +40,8 @@ class Logbook implements LoggerInterface
      */
     private function driver(): Monolog
     {
-        $logger = new Monolog($this->getName());
-        $logger->pushHandler($this->logHandler);
+        $logger = new Monolog($this->getChannel());
+        $logger->pushHandler(new LogbookHandler());
         $logger->pushProcessor(new PsrLogMessageProcessor());
 
         return $logger;
@@ -63,21 +52,20 @@ class Logbook implements LoggerInterface
      *
      * @return string
      */
-    private function getName(): string
+    private function getChannel(): string
     {
-        if (null === $this->name) {
+        if (null === $this->channel) {
             return self::CHANNEL;
         }
 
-        return $this->name;
+        return $this->channel;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function alert(Stringable|string $message, array $context = []): void
     {
@@ -85,12 +73,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
-     *
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function critical(Stringable|string $message, array $context = []): void
     {
@@ -98,11 +84,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function error(Stringable|string $message, array $context = []): void
     {
@@ -110,11 +95,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function warning(Stringable|string $message, array $context = []): void
     {
@@ -122,11 +106,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function notice(Stringable|string $message, array $context = []): void
     {
@@ -134,11 +117,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function info(Stringable|string $message, array $context = []): void
     {
@@ -146,11 +128,10 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function debug(Stringable|string $message, array $context = []): void
     {
@@ -158,12 +139,11 @@ class Logbook implements LoggerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @param $level
-     * @param Stringable|string $message
-     *
-     * @param array $context
+     * @param  Stringable|string  $message
+     * @param  array  $context
      */
     public function log($level, Stringable|string $message, array $context = []): void
     {

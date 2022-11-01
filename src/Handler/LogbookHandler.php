@@ -1,6 +1,6 @@
 <?php
 
-namespace Solvrtech\LogbookClient;
+namespace Solvrtech\LogbookClient\Handler;
 
 use Exception;
 use GuzzleHttp\Client;
@@ -11,38 +11,41 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\LogRecord;
 use Psr\Log\LogLevel;
 
-class LogHandler extends AbstractProcessingHandler
+class LogbookHandler extends AbstractProcessingHandler
 {
     public function __construct(
         int|string|LogLevel $level = LogLevel::DEBUG,
-        bool                $bubble = true
-    )
-    {
+        bool $bubble = true
+    ) {
         parent::__construct($level, $bubble);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @throws Exception
      */
     protected function write(LogRecord|array $record): void
     {
-        $httpClient = new Client(['base_uri' => $this->getUrl()]);
+        $httpClient = new Client([
+            'base_uri' => $this->getUrl(),
+            'timeout' => 2.0,
+        ]);
         try {
             $httpClient->request(
                 'POST',
-                "log/save",
+                'log/save',
                 [
                     'headers' => [
                         'Content-Type' => 'application/json',
-                        'token' => $this->getToken()
+                        'Accept' => 'application/json',
+                        'token' => $this->getToken(),
                     ],
-                    'json' => $record->formatted
+                    'body' => $record['formatted'],
                 ]
             );
         } catch (Exception|GuzzleException $e) {
-            throw new Exception("Save log was failed");
+            // catch request error
         }
     }
 
@@ -58,7 +61,7 @@ class LogHandler extends AbstractProcessingHandler
         $url = config('logbook.option.url');
 
         if (null === $url) {
-            throw new Exception("Logbook url not found");
+            throw new Exception('Logbook url not found');
         }
 
         return $url;
@@ -76,14 +79,14 @@ class LogHandler extends AbstractProcessingHandler
         $token = config('logbook.option.token');
 
         if (null === $token) {
-            throw new Exception("Logbook token not found");
+            throw new Exception('Logbook token not found');
         }
 
         return $token;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getDefaultFormatter(): FormatterInterface
     {

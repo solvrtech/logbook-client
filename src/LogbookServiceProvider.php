@@ -7,6 +7,19 @@ use Illuminate\Support\ServiceProvider;
 class LogbookServiceProvider extends ServiceProvider
 {
     /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->app->bind(
+            LogbookInterface::class,
+            Logbook::class
+        );
+    }
+
+    /**
      * Bootstrap any package services.
      *
      * @return void
@@ -14,12 +27,7 @@ class LogbookServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/logbook.php' => config_path('logbook.php'),
+            __DIR__.'/../config/logbook.php' => config_path('logbook.php'),
         ]);
-    }
-
-    public function register()
-    {
-        $this->app->bind('Solvrtech\LogbookClient\Logbook');
     }
 }
