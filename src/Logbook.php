@@ -65,11 +65,11 @@ class Logbook implements LoggerInterface
      */
     private function getName(): string
     {
-        if (null === $this->loggerName) {
+        if (null === $this->name) {
             return self::CHANNEL;
         }
 
-        return $this->loggerName;
+        return $this->name;
     }
 
     /**
