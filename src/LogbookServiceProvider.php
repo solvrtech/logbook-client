@@ -20,7 +20,6 @@ class LogbookServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind(
-            'Solvrtech\LogbookClient\Logbook');
+        $this->app->bind('Solvrtech\LogbookClient\Logbook');
     }
 }

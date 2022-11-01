@@ -8,35 +8,32 @@ use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
+use Psr\Log\LogLevel;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LogHandler extends AbstractProcessingHandler
 {
-    private HttpClientInterface $httpClient;
-
     public function __construct(
-        HttpClientInterface $httpClient,
-        int|string|Level    $level = Level::Debug,
+        int|string|LogLevel $level = LogLevel::DEBUG,
         bool                $bubble = true
     )
     {
-        $this->httpClient = $httpClient;
-
         parent::__construct($level, $bubble);
     }
 
     /**
      * @inheritDoc
      *
-     * @throws Exception|TransportExceptionInterface
+     * @throws Exception
      */
     protected function write(LogRecord|array $record): void
     {
+        $httpClient = new Client(['base_uri' => $this->getUrl()]);
         try {
             $this->httpClient->request(
                 'POST',
-                "{$this->getUrl()}/log/save",
+                "log/save",
                 [
                     'headers' => [
                         'Content-Type' => 'application/json',
