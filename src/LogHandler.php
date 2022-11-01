@@ -3,14 +3,13 @@
 namespace Solvrtech\LogbookClient;
 
 use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Level;
 use Monolog\LogRecord;
 use Psr\Log\LogLevel;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LogHandler extends AbstractProcessingHandler
 {
@@ -31,7 +30,7 @@ class LogHandler extends AbstractProcessingHandler
     {
         $httpClient = new Client(['base_uri' => $this->getUrl()]);
         try {
-            $this->httpClient->request(
+            $httpClient->request(
                 'POST',
                 "log/save",
                 [
@@ -42,10 +41,9 @@ class LogHandler extends AbstractProcessingHandler
                     'json' => $record->formatted
                 ]
             );
-        } catch (Exception $e) {
+        } catch (Exception|GuzzleException $e) {
             throw new Exception("Save log was failed");
         }
-
     }
 
     /**
