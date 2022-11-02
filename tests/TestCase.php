@@ -12,7 +12,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
      * @param $app
      * @return string[]
      */
-    protected function getApplicationProviders($app)
+    protected function getApplicationProviders($app): array
     {
         return [
             LogbookServiceProvider::class,

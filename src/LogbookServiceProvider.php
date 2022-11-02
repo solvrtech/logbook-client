@@ -3,6 +3,7 @@
 namespace Solvrtech\LogbookClient;
 
 use Illuminate\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
 class LogbookServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,7 @@ class LogbookServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            LogbookInterface::class,
+            LoggerInterface::class,
             Logbook::class
         );
     }
